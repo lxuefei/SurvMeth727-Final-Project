@@ -95,8 +95,7 @@ dp3 %>%
 
 ```{r}
 # export data to excel format
-dp1 <- as.data.frame(dp1)
-write.table(dp1, "dp1-date.csv")
-write.csv(dp2, "dp2-date.csv")
-write.csv(dp3, "dp3-date.csv")
+save_as_csv(dp1, "dp1-date.csv")
+save_as_csv(dp2, "dp2-date.csv")
+save_as_csv(dp3, "dp3-date.csv")
 ```
