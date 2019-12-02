@@ -1,0 +1,29 @@
+---
+title: "dp-analysis"
+output: html_document
+---
+```{r}
+library(rtweet)
+library(twitteR)
+library(syuzhet)
+library(tm)
+library(SnowballC)
+library(tidytext)
+library(ggmap)
+library(dplyr)
+library(ggplot2)
+
+```
+
+```{r}
+# import data to excel format
+dp1 <- read.csv("dp1-date.csv")
+dp2 <- read.csv("dp2-date.csv")
+dp3 <- read.csv("dp3-date.csv")
+```
+
+
+```{r}
+# Set date format
+date1 <- as.Date(dp1$created_at)
+```
