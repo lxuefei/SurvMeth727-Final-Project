@@ -83,13 +83,13 @@ dp3 <- subset(dp3, is.na(dp3$url))
 
 ```{r}
 # extract variables from data.frame
-dp1 %>%
+dp1 <- dp1 %>%
   select (user_id, created_at, text, source, display_text_width, location, followers_count, friends_count, listed_count, statuses_count, favourites_count, account_created_at)
 
-dp2 %>%
+dp2 <- dp2 %>%
   select (user_id, created_at, text, source, display_text_width, location, followers_count, friends_count, listed_count, statuses_count, favourites_count, account_created_at)
 
-dp3 %>%
+dp3 <- dp3 %>%
   select (user_id, created_at, text, source, display_text_width, location, followers_count, friends_count, listed_count, statuses_count, favourites_count, account_created_at)
 ```
 
