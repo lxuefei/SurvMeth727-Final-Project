@@ -3,6 +3,11 @@ title: "dp-analysis"
 output: html_document
 ---
 ```{r}
+#install.packages("wordcloud2")
+#install.packages("lubridate")
+#install.packages("jiebaR")
+#install.packages("jiebaRD")
+
 library(rtweet)
 library(twitteR)
 library(syuzhet)
@@ -12,6 +17,10 @@ library(tidytext)
 library(ggmap)
 library(dplyr)
 library(ggplot2)
+library(lubridate)
+library(wordcloud2)
+library(jiebaR)
+library(jiebaRD)
 
 ```
 
@@ -25,5 +34,33 @@ dp3 <- read.csv("dp3-date.csv")
 
 ```{r}
 # Set date format
-date1 <- as.Date(dp1$created_at)
+dp1$date <- as.Date(dp1$created_at)
+dp2$date <- as.Date(dp2$created_at)
+dp2$date <- as.Date(dp2$created_at)
+
+# Set time format
+dp1$time <- ymd_hms(dp1$created_at)
+dp2$time <- ymd_hms(dp2$created_at)
+dp3$time <- ymd_hms(dp3$created_at)
+```
+
+```{r}
+# Create wordclouds for each group
+dp1_text <- as.character(dp1$text)
+
+seg <- qseg[txt] #使用qseg类型分词
+seg <- seg[nchar(seg)>1] #去除字符长度小于1的词
+seg <- table(seg)
+seg <- seg[!grepl('[0-9]+',names(seg))]#过滤数字
+
+seg_50 <- sort(seg, decreasing = TRUE)[1:50]
+#获得词频数前50的词
+seg_50
+wordcloud2(seg,size = 2, minRotation = -pi/2, maxRotation = -pi/2) # Create wordcloud
+```
+
+```{r}
+# Description statistics
+
+
 ```
