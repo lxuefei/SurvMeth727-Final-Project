@@ -50,7 +50,7 @@ dp3$time <- ymd_hms(dp3$created_at)
 # Create wordclouds for each group
 dp1_text <- as.character(dp1$text)
 
-seg <- qseg[txt] #使用qseg类型分词
+seg <- qseg[dp1_text] #使用qseg类型分词
 seg <- seg[nchar(seg)>1] #去除字符长度小于1的词
 seg <- table(seg)
 seg <- seg[!grepl('[0-9]+',names(seg))]#过滤数字
@@ -58,6 +58,7 @@ seg <- seg[!grepl('[0-9]+',names(seg))]#过滤数字
 seg_50 <- sort(seg, decreasing = TRUE)[1:50]
 #获得词频数前50的词
 seg_50
+barplot(seg_50)
 wordcloud2(seg,size = 2, minRotation = -pi/2, maxRotation = -pi/2) # Create wordcloud
 ```
 
