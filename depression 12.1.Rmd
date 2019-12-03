@@ -74,7 +74,7 @@ dp2 <- setdiff(dp2,dp1)
 ```{r}
 # delete hashtags & urls in dp1, dp2, dp3
 dp1 <- subset(dp1, is.na(dp1$hashtags))
-dp1 <- subset(dp1, is.na(dp1_test$url))
+dp1 <- subset(dp1, is.na(dp1$url))
 dp2 <- subset(dp2, is.na(dp2$hashtags))
 dp2 <- subset(dp2, is.na(dp2$url))
 dp3 <- subset(dp3, is.na(dp3$hashtags))
