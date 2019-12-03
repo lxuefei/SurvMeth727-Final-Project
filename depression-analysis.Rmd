@@ -9,6 +9,7 @@ output: html_document
 #install.packages("jiebaRD")
 #install.packages("vcd")
 #install.packages("ggpubr")
+#install.packages("rowr")
 library(rtweet)
 library(twitteR)
 library(syuzhet)
@@ -24,6 +25,7 @@ library(jiebaR)
 library(jiebaRD)
 library(vcd)
 library(ggpubr)
+library(rowr)
 
 ```
 
@@ -115,5 +117,7 @@ ggplot(dp_all) +
 
 ```{r}
 # 统计分析 - 比较三组的follower是否有区别
+df_folw <-cbind.fill(dp1$followers_count, dp2$followers_count, dp3$followers_count, fill = NA)
+
 
 ```
