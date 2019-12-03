@@ -8,7 +8,7 @@ output: html_document
 #install.packages("jiebaR")
 #install.packages("jiebaRD")
 #install.packages("vcd")
-
+#install.packages("ggpubr")
 library(rtweet)
 library(twitteR)
 library(syuzhet)
@@ -23,6 +23,7 @@ library(wordcloud2)
 library(jiebaR)
 library(jiebaRD)
 library(vcd)
+library(ggpubr)
 
 ```
 
@@ -84,11 +85,25 @@ summary(dp_all)
 dp_agg <- dp_all %>%
   select(display_text_width, followers_count, friends_count, listed_count, statuses_count, favourites_count, group) 
 dp_stats <- aggregate(dp_agg[,(1:6)], by = list(dp_agg$group), FUN = mean)
+colnames(dp_stats)[1] <- "group"
+dp_stats
 
 
-ggplot(data = dp_agg, aes(y = followers_count, x = group, fill = group)) +
+# 定量数据图
+
+p1 <- ggplot(data = dp_stats, aes(y = followers_count, x = group, fill = group)) +
   geom_bar(stat="identity") +
   theme_minimal()
+p2 <- ggplot(data = dp_stats, aes(y = friends_count, x = group, fill = group)) +
+  geom_bar(stat="identity") +
+  theme_minimal()
+p3 <- ggplot(data = dp_stats, aes(y = statuses_count, x = group, fill = group)) +
+  geom_bar(stat="identity") +
+  theme_minimal()
+p4 <- ggplot(data = dp_stats, aes(y = favourites_count, x = group, fill = group)) +
+  geom_bar(stat="identity") +
+  theme_minimal()
+ggarrange(p1,p2,p3,p4, ncol=2,nrow=2,labels=c("A","B","C","D"))
   
 
 # Descriptive statistics - 分类数据
