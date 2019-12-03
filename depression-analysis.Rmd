@@ -72,12 +72,19 @@ group_3 <- rep(3, times = nrow(dp3))
 dp3$group <- group_3
 
 dp_all <- bind_rows(dp1,dp2,dp3)
+dp_all$group = factor(dp_all$group, levels = c(1,2,3), labels = c("group1", "group2", "group3"))
 head(dp_all)
 
 ```
 
 ```{r}
-# Descriptive statistics
+# Descriptive statistics - 定量数据
 summary(dp_all)
+
+x <- dp_all %>%
+  select(display_text_width, followers_count, friends_count, listed_count, statuses_count, favourites_count, group) 
+aggregate(x[,(1:6)], by = list(x$group), FUN = mean)
+
+
 
 ```
