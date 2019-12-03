@@ -83,14 +83,22 @@ summary(dp_all)
 
 dp_agg <- dp_all %>%
   select(display_text_width, followers_count, friends_count, listed_count, statuses_count, favourites_count, group) 
-aggregate(dp_agg[,(1:6)], by = list(dp_agg$group), FUN = mean)
+dp_stats <- aggregate(dp_agg[,(1:6)], by = list(dp_agg$group), FUN = mean)
+
 
 ggplot(data = dp_agg, aes(y = followers_count, x = group, fill = group)) +
   geom_bar(stat="identity") +
   theme_minimal()
+  
 
 # Descriptive statistics - 分类数据
 ggplot(dp_all) +
   geom_bar(mapping = aes(x = source)) +
   coord_flip()
+
+```
+
+```{r}
+# 统计分析 - 比较三组的follower是否有区别
+
 ```
