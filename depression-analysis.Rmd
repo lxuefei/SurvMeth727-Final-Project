@@ -77,6 +77,6 @@ head(dp_all)
 
 ```{r}
 # Descriptive statistics
-
+summary(dp_all)
 
 ```
