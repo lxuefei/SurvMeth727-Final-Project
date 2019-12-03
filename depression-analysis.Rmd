@@ -81,10 +81,12 @@ head(dp_all)
 # Descriptive statistics - 定量数据
 summary(dp_all)
 
-x <- dp_all %>%
+dp_agg <- dp_all %>%
   select(display_text_width, followers_count, friends_count, listed_count, statuses_count, favourites_count, group) 
-aggregate(x[,(1:6)], by = list(x$group), FUN = mean)
+aggregate(dp_agg[,(1:6)], by = list(dp_agg$group), FUN = mean)
 
-
-
+# Descriptive statistics - 分类数据
+ggplot(dp_all) +
+  geom_bar(mapping = aes(x = source)) +
+  coord_flip()
 ```
