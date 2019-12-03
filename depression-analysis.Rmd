@@ -117,7 +117,29 @@ ggplot(dp_all) +
 
 ```{r}
 # 统计分析 - 比较三组的follower是否有区别
-df_folw <-cbind.fill(dp1$followers_count, dp2$followers_count, dp3$followers_count, fill = NA)
+df_test <- cbind.fill(dp1$followers_count, dp2$followers_count, dp3$followers_count, fill = NA)
+df_folw <- cbind.fill(dp_agg$group, dp_agg$followers_count)
+colnames(df_folw) <- c("group", "folw_n")
 
+# Shapiro-Wilk normality test for group1
+with(df_folw, shapiro.test(folw_n[group == "group1"])) # p =
+# Shapiro-Wilk normality test for group2
+with(df_folw, shapiro.test(folw_n[group == "group2"])) # p =
+# Shapiro-Wilk normality test for group3
+with(df_folw, shapiro.test(folw_n[group == "group3"])) # p =
+# From the output, the two p-values are greater than the significance level 0.05 implying that the distribution of the data are not significantly different from the normal distribution. In other words, we can assume the normality.
 
+#if the data are not normally distributed, it’s recommended to use the non parametric two-samples Wilcoxon rank test.
+
+#Group 1 vs. Group 2
+#Assumption 3. Do the two populations have the same variances?
+df_folw_12 <- df_folw %>%
+  filter(group == "group1" | group == "group2")
+res.ftest <- var.test(folw_n ~ group, data = df_folw_12)
+res.ftest
+#The p-value of F-test is p = 0.1713596. It’s greater than the significance level alpha = 0.05. In conclusion, there is no significant difference between the variances of the two sets of data. Therefore, we can use the classic t-test witch assume equality of the two variances.
+
+#t-test
+res_folw_12 <- t.test(folw_n ~ group, data = df_folw_12, var.equal = FALSE)
+res_folw_12
 ```
