@@ -60,7 +60,7 @@ wordcloud2(seg,size = 2, minRotation = -pi/2, maxRotation = -pi/2) # Create word
 ```
 
 ```{r}
-# Description statistics
+# Descriptive statistics
 
 
 ```
