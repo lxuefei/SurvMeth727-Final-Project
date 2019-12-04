@@ -113,7 +113,9 @@ ggarrange(p1,p2,p3,p4, ncol=2,nrow=2,labels=c("A","B","C","D"))
   
 
 # Descriptive statistics - 分类数据
-ggplot(dp_all) +
+dp_all %>%
+  filter(source == "Facebook"|source == "Instagram"|source == "Tweetbot for iOS"|source == "TweetDeck"|source == "twittbot.net"|source == "Twitter for Android"|source == "Twitter for iPad"|source == "Twitter for iPhone"|source == "Twitter Web App"|source == "Twitter Web Client") %>%
+  ggplot() +
   geom_bar(mapping = aes(x = source)) +
   coord_flip()
 
