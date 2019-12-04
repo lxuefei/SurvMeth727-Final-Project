@@ -55,8 +55,12 @@ dp1_text <- as.character(dp1$text)
 
 seg <- qseg[dp1_text] #使用qseg类型分词
 seg <- seg[nchar(seg)>1] #去除字符长度小于1的词
+seg
+
+# Set stopwords
+all_stops <- c("and","of","http","to","for","in","on","the","with","at","or","from")
+seg <- removeWords(seg, all_stops)
 seg <- table(seg)
-seg <- seg[!grepl('[0-9]+',names(seg))]#过滤数字
 
 seg_50 <- sort(seg, decreasing = TRUE)[1:50]
 #获得词频数前50的词
@@ -116,30 +120,206 @@ ggplot(dp_all) +
 ```
 
 ```{r}
-# 统计分析 - 比较三组的follower是否有区别
-df_test <- cbind.fill(dp1$followers_count, dp2$followers_count, dp3$followers_count, fill = NA)
+# Statistical Analysis - Comparison the Followers over three groups
+
+# Prepare dataset
 df_folw <- cbind.fill(dp_agg$group, dp_agg$followers_count)
 colnames(df_folw) <- c("group", "folw_n")
 
-# Shapiro-Wilk normality test for group1
-with(df_folw, shapiro.test(folw_n[group == "group1"])) # p =
-# Shapiro-Wilk normality test for group2
-with(df_folw, shapiro.test(folw_n[group == "group2"])) # p =
-# Shapiro-Wilk normality test for group3
-with(df_folw, shapiro.test(folw_n[group == "group3"])) # p =
-# From the output, the two p-values are greater than the significance level 0.05 implying that the distribution of the data are not significantly different from the normal distribution. In other words, we can assume the normality.
+# Shapiro-Wilk normality test for three groups
+with(df_folw, shapiro.test(folw_n[group == "group1"])) 
+with(df_folw, shapiro.test(folw_n[group == "group2"])) 
+with(df_folw, shapiro.test(folw_n[group == "group3"])) 
+# From the output, the two p-values are smaller than the significance level 0.05 implying that the distribution of the data are not significantly different from the normal distribution. In other words, we cannot assume the normality.
 
-#if the data are not normally distributed, it’s recommended to use the non parametric two-samples Wilcoxon rank test.
-
-#Group 1 vs. Group 2
-#Assumption 3. Do the two populations have the same variances?
+# Group 1 vs. Group 2
+# Test whether the two populations have the same variances
 df_folw_12 <- df_folw %>%
   filter(group == "group1" | group == "group2")
 res.ftest <- var.test(folw_n ~ group, data = df_folw_12)
 res.ftest
-#The p-value of F-test is p = 0.1713596. It’s greater than the significance level alpha = 0.05. In conclusion, there is no significant difference between the variances of the two sets of data. Therefore, we can use the classic t-test witch assume equality of the two variances.
+#The p-value of F-test is p < 0.05. It’s smaller than the significance level alpha = 0.05. In conclusion, there is a significant difference between the variances of the two sets of data.
 
 #t-test
 res_folw_12 <- t.test(folw_n ~ group, data = df_folw_12, var.equal = FALSE)
 res_folw_12
+
+# Group 2 vs. Group 3
+# Test whether the two populations have the same variances
+df_folw_23 <- df_folw %>%
+  filter(group == "group2" | group == "group3")
+res.ftest <- var.test(folw_n ~ group, data = df_folw_23)
+res.ftest
+#The p-value of F-test is p < 0.05. It’s smaller than the significance level alpha = 0.05. In conclusion, there is a significant difference between the variances of the two sets of data.
+
+#t-test
+res_folw_23 <- t.test(folw_n ~ group, data = df_folw_23, var.equal = FALSE)
+res_folw_23
+
+# Group 1 vs. Group 3
+# Test whether the two populations have the same variances
+df_folw_13 <- df_folw %>%
+  filter(group == "group1" | group == "group3")
+res.ftest <- var.test(folw_n ~ group, data = df_folw_13)
+res.ftest
+#The p-value of F-test is p < 0.05. It’s smaller than the significance level alpha = 0.05. In conclusion, there is a significant difference between the variances of the two sets of data.
+
+#t-test
+res_folw_13 <- t.test(folw_n ~ group, data = df_folw_13, var.equal = FALSE)
+res_folw_13
+```
+
+```{r}
+# Statistical Analysis - Comparison the Friends over three groups
+
+# Prepare dataset
+df_frid <- cbind.fill(dp_agg$group, dp_agg$friends_count)
+colnames(df_frid) <- c("group", "frid_n")
+
+# Shapiro-Wilk normality test for three groups
+with(df_frid, shapiro.test(frid_n[group == "group1"])) 
+with(df_frid, shapiro.test(frid_n[group == "group2"])) 
+with(df_frid, shapiro.test(frid_n[group == "group3"])) 
+# From the output, the two p-values are smaller than the significance level 0.05 implying that the distribution of the data are not significantly different from the normal distribution. In other words, we cannot assume the normality.
+
+# Group 1 vs. Group 2
+# Test whether the two populations have the same variances
+df_frid_12 <- df_frid %>%
+  filter(group == "group1" | group == "group2")
+res.ftest <- var.test(frid_n ~ group, data = df_frid_12)
+res.ftest
+#The p-value of F-test is p < 0.05. It’s smaller than the significance level alpha = 0.05. In conclusion, there is a significant difference between the variances of the two sets of data.
+
+#t-test
+res_frid_12 <- t.test(frid_n ~ group, data = df_frid_12, var.equal = FALSE)
+res_frid_12
+
+# Group 2 vs. Group 3
+# Test whether the two populations have the same variances
+df_frid_23 <- df_frid %>%
+  filter(group == "group2" | group == "group3")
+res.ftest <- var.test(frid_n ~ group, data = df_frid_23)
+res.ftest
+#The p-value of F-test is p < 0.05. It’s smaller than the significance level alpha = 0.05. In conclusion, there is a significant difference between the variances of the two sets of data.
+
+#t-test
+res_frid_23 <- t.test(frid_n ~ group, data = df_frid_23, var.equal = FALSE)
+res_frid_23
+
+# Group 1 vs. Group 3
+# Test whether the two populations have the same variances
+df_frid_13 <- df_frid %>%
+  filter(group == "group1" | group == "group3")
+res.ftest <- var.test(frid_n ~ group, data = df_frid_13)
+res.ftest
+#The p-value of F-test is p < 0.05. It’s smaller than the significance level alpha = 0.05. In conclusion, there is a significant difference between the variances of the two sets of data.
+
+#t-test
+res_frid_13 <- t.test(frid_n ~ group, data = df_frid_13, var.equal = FALSE)
+res_frid_13
+```
+
+```{r}
+# Statistical Analysis - Comparison the Statuses over three groups
+
+# Prepare dataset
+df_stat <- cbind.fill(dp_agg$group, dp_agg$statuses_count)
+colnames(df_stat) <- c("group", "stat_n")
+
+# Shapiro-Wilk normality test for three groups
+with(df_stat, shapiro.test(stat_n[group == "group1"])) 
+with(df_stat, shapiro.test(stat_n[group == "group2"])) 
+with(df_stat, shapiro.test(stat_n[group == "group3"])) 
+# From the output, the two p-values are smaller than the significance level 0.05 implying that the distribution of the data are not significantly different from the normal distribution. In other words, we cannot assume the normality.
+
+# Group 1 vs. Group 2
+# Test whether the two populations have the same variances
+df_stat_12 <- df_stat %>%
+  filter(group == "group1" | group == "group2")
+res.ftest <- var.test(stat_n ~ group, data = df_stat_12)
+res.ftest
+#The p-value of F-test is p < 0.05. It’s smaller than the significance level alpha = 0.05. In conclusion, there is a significant difference between the variances of the two sets of data.
+
+#t-test
+res_stat_12 <- t.test(stat_n ~ group, data = df_stat_12, var.equal = FALSE)
+res_stat_12
+
+# Group 2 vs. Group 3
+# Test whether the two populations have the same variances
+df_stat_23 <- df_stat %>%
+  filter(group == "group2" | group == "group3")
+res.ftest <- var.test(stat_n ~ group, data = df_stat_23)
+res.ftest
+#The p-value of F-test is p < 0.05. It’s smaller than the significance level alpha = 0.05. In conclusion, there is a significant difference between the variances of the two sets of data.
+
+#t-test
+res_stat_23 <- t.test(stat_n ~ group, data = df_stat_23, var.equal = FALSE)
+res_stat_23
+
+# Group 1 vs. Group 3
+# Test whether the two populations have the same variances
+df_stat_13 <- df_stat %>%
+  filter(group == "group1" | group == "group3")
+res.ftest <- var.test(stat_n ~ group, data = df_stat_13)
+res.ftest
+#The p-value of F-test is p < 0.05. It’s smaller than the significance level alpha = 0.05. In conclusion, there is a significant difference between the variances of the two sets of data.
+
+#t-test
+res_stat_13 <- t.test(stat_n ~ group, data = df_stat_13, var.equal = FALSE)
+res_stat_13
+```
+
+```{r}
+# Statistical Analysis - Comparison the Favourites over three groups
+
+# Prepare dataset
+df_favr <- cbind.fill(dp_agg$group, dp_agg$favourites_count)
+colnames(df_favr) <- c("group", "favr_n")
+
+# Shapiro-Wilk normality test for three groups
+with(df_favr, shapiro.test(favr_n[group == "group1"])) 
+with(df_favr, shapiro.test(favr_n[group == "group2"])) 
+with(df_favr, shapiro.test(favr_n[group == "group3"])) 
+# From the output, the two p-values are smaller than the significance level 0.05 implying that the distribution of the data are not significantly different from the normal distribution. In other words, we cannot assume the normality.
+
+# Group 1 vs. Group 2
+# Test whether the two populations have the same variances
+df_favr_12 <- df_favr %>%
+  filter(group == "group1" | group == "group2")
+res.ftest <- var.test(favr_n ~ group, data = df_favr_12)
+res.ftest
+#The p-value of F-test is p < 0.05. It’s smaller than the significance level alpha = 0.05. In conclusion, there is a significant difference between the variances of the two sets of data.
+
+#t-test
+res_favr_12 <- t.test(favr_n ~ group, data = df_favr_12, var.equal = FALSE)
+res_favr_12
+
+# Group 2 vs. Group 3
+# Test whether the two populations have the same variances
+df_favr_23 <- df_favr %>%
+  filter(group == "group2" | group == "group3")
+res.ftest <- var.test(favr_n ~ group, data = df_favr_23)
+res.ftest
+#The p-value of F-test is p < 0.05. It’s smaller than the significance level alpha = 0.05. In conclusion, there is a significant difference between the variances of the two sets of data.
+
+#t-test
+res_favr_23 <- t.test(favr_n ~ group, data = df_favr_23, var.equal = FALSE)
+res_favr_23
+
+# Group 1 vs. Group 3
+# Test whether the two populations have the same variances
+df_favr_13 <- df_favr %>%
+  filter(group == "group1" | group == "group3")
+res.ftest <- var.test(favr_n ~ group, data = df_favr_13)
+res.ftest
+#The p-value of F-test is p < 0.05. It’s smaller than the significance level alpha = 0.05. In conclusion, there is a significant difference between the variances of the two sets of data.
+
+#t-test
+res_favr_13 <- t.test(favr_n ~ group, data = df_favr_13, var.equal = FALSE)
+res_favr_13
+```
+
+```{r}
+
+
 ```
