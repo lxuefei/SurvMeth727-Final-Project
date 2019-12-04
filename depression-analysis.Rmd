@@ -118,7 +118,7 @@ dp_all %>%
   summarise(total = n()) %>%
   filter(source == "Facebook"|source == "Instagram"|source == "Tweetbot for iOS"|source == "TweetDeck"|source == "twittbot.net"|source == "Twitter for Android"|source == "Twitter for iPad"|source == "Twitter for iPhone"|source == "Twitter Web App"|source == "Twitter Web Client") %>%
   ggplot() +
-  geom_bar(mapping = aes(x = reorder(source, total), y = total), stat = 'identity') +
+  geom_bar(mapping = aes(x = reorder(source, total), y = total), stat = 'identity', fill = 'skyblue2') +
   coord_flip()
 
 ```
