@@ -10,6 +10,7 @@ output: html_document
 #install.packages("vcd")
 #install.packages("ggpubr")
 #install.packages("rowr")
+#install.packages("Rsentiment")
 library(rtweet)
 library(twitteR)
 library(syuzhet)
@@ -26,6 +27,9 @@ library(jiebaRD)
 library(vcd)
 library(ggpubr)
 library(rowr)
+library(readr)
+library(stringr)
+library(DT)
 
 ```
 
@@ -113,8 +117,12 @@ ggarrange(p1,p2,p3,p4, ncol=2,nrow=2,labels=c("A","B","C","D"))
   
 
 # Descriptive statistics - 分类数据
-ggplot(dp_all) +
-  geom_bar(mapping = aes(x = source)) +
+dp_all %>%
+  group_by(source) %>%
+  summarise(total = n()) %>%
+  filter(source == "Facebook"|source == "Instagram"|source == "Tweetbot for iOS"|source == "TweetDeck"|source == "twittbot.net"|source == "Twitter for Android"|source == "Twitter for iPad"|source == "Twitter for iPhone"|source == "Twitter Web App"|source == "Twitter Web Client") %>%
+  ggplot() +
+  geom_bar(mapping = aes(x = reorder(source, total), y = total), stat = 'identity', fill = 'skyblue2') +
   coord_flip()
 
 ```
@@ -320,6 +328,75 @@ res_favr_13
 ```
 
 ```{r}
+# Time analysis
 
+# Extract date to cover the NA
+dp_all$date <- as.Date(dp_all$time)
 
+# Create new time variables: roundhour, hour, roundmin, minute
+ymd(19970316); myd(03199716); dmy(16031997)
+test_date <- ymd_hms("1997-03-16 12:01:30")
+dp_all$roundhour <- round_date(dp_all$time, 'hour')
+dp_all$roundmin <- round_date(dp_all$time, "minute")
+dp_all$hour <- hour(dp_all$roundhour)
+dp_all$minute <- minute(dp_all$roundmin)
+
+# Graph twitter counts in 24 hours
+dp_all %>%
+  group_by(group, hour) %>%
+  summarise(total = n()) %>%
+  ggplot() +
+  geom_bar(mapping = aes(x = hour, y = total, fill = group), stat = "identity")+
+  geom_line(mapping = aes(x = hour, y = total, fill = group), colour = "navy") +
+  theme_minimal() 
+# Focus on group 3
+dp_all %>%
+  group_by(group, hour) %>%
+  summarise(total = n()) %>%
+  filter(group == "group3") %>%
+  ggplot() +
+  geom_bar(mapping = aes(x = hour, y = total), stat = "identity", fill = "lightblue") +
+  geom_line(mapping = aes(x = hour, y = total), colour = "navy") +
+  theme_minimal()
+```
+
+```{r}
+# Sentiment analysis
+
+# Extract text
+dp_all$twttext <- as.character(dp_all$text)
+
+# Text cleaning
+dp_all$twttext %<>%
+  gsub("(RT|via)((?:\\b\\w*@\\w+)+)", " ", .) %>%
+  gsub("http[^[:blank:]]+", " ", .) %>%
+  gsub("@\\w+", " ", .) %>%
+  gsub("[[:punct:]]", " ", .) %>%
+  gsub("[^[:alnum:]]", " ", .)
+
+sentiment <- get_nrc_sentiment(dp_all$twttext, language = 'english')
+
+stm.positive <- sum(sentiment$positive)
+stm.anger <- sum(sentiment$anger)
+stm.anticipation <- sum(sentiment$anticipation)
+stm.disgust <- sum(sentiment$disgust)
+stm.fear <- sum(sentiment$fear)
+stm.joy <- sum(sentiment$joy)
+stm.sadness <- sum(sentiment$sadness)
+stm.surprise <- sum(sentiment$surprise)
+stm.trust <- sum(sentiment$trust)
+stm.negative <- sum(sentiment$negative)
+
+# Create sentiment data frame
+sentiment_type <- c("Positive", "Anger", "Anticipation", "Disgust", "Fear", "Joy", "Sadness", "Surprise", "Trust", "Negative")
+score <- c(stm.positive, stm.anger, stm.anticipation, stm.disgust, stm.fear, stm.joy, stm.sadness, stm.surprise, stm.trust, stm.negative)
+sentiment_data <- data.frame(sentiment_type, score)
+
+# Graph sentiment
+yaxis <- c(stm.positive, stm.anger, stm.anticipation, stm.disgust, stm.fear, stm.joy, stm.sadness, stm.surprise, stm.trust, stm.negative)
+xaxis <- c("Positive", "Anger", "Anticipation", "Disgust", "Fear", "Joy", "Sadness", "Surprise", "Trust", "Negative")
+color <- c("palegreen4", "orangered4", "palegreen3", "orangered3", "orangered4", "palegreen4", "orangered3", "palegreen3", "palegreen4", "orangered4")
+yrange <- range(0, yaxis)
+barplot(yaxis, names.arg = xaxis, xlab = "Sentiment Categories", ylab = "Sentiment Score", main = "Twitter sentiment for 'Depression'", col = color, border = "white", ylim = yrange, cex.axis = 0.6, cex.names = 0.6)
+stm_table <- c(stm.positive, stm.anger, stm.anticipation, stm.disgust, stm.fear, stm.joy, stm.sadness, stm.surprise, stm.trust, stm.negative)
 ```
