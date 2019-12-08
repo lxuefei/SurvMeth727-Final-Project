@@ -303,10 +303,11 @@ dp_all$minute <- minute(dp_all$roundmin)
 dp_all %>%
   group_by(group, hour) %>%
   summarise(total = n()) %>%
+  filter(group == "group1" | group == "group3") %>%
   ggplot() +
   geom_bar(mapping = aes(x = hour, y = total, fill = group), stat = "identity")+
   geom_line(mapping = aes(x = hour, y = total, fill = group), colour = "navy") +
-  theme_minimal() 
+  theme_classic() 
 # Focus on group 3
 dp_all %>%
   group_by(group, hour) %>%
@@ -315,7 +316,7 @@ dp_all %>%
   ggplot() +
   geom_bar(mapping = aes(x = hour, y = total), stat = "identity", fill = "lightblue") +
   geom_line(mapping = aes(x = hour, y = total), colour = "navy") +
-  theme_minimal()
+  theme_classic()
 ```
 
 ```{r}
