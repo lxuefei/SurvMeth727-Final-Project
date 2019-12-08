@@ -394,6 +394,7 @@ stm.sadness <- sum(sentiment$sadness)
 stm.surprise <- sum(sentiment$surprise)
 stm.trust <- sum(sentiment$trust)
 stm.negative <- sum(sentiment$negative)
+```
 
 # Group by groups
 
