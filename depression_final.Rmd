@@ -478,3 +478,71 @@ yrange_3 <- range(0, yaxis_3)
 barplot(yaxis_3, names.arg = xaxis, xlab = "Sentiment Categories", ylab = "Sentiment Score of Group 3", main = "Group 3: Twitter sentiment for 'Depresson'", col = color, border = "white", ylim = yrange, cex.axis = 0.6, cex.names = 0.6)
 stm_table_3 <- c(stm.positive_3, stm.anger_3, stm.anticipation_3, stm.disgust_3, stm.fear_3, stm.joy_3, stm.sadness_3, stm.surprise_3, stm.trust_3, stm.negative_3)
 ```
+
+# linear regression
+
+# Merge the columns of sentiment score into data
+sentiment_test <- get_nrc_sentiment(dp_all$twttext, language = 'english')
+sentiment_tt <- cbind(dp_all, sentiment_test)
+
+# Convert the negative sentiment score to negative integers, add up to get a total sentiment score
+sentiment_tt$sentiment_score <- sentiment_tt$positive + sentiment_tt$negative*(-1)
+
+# model_all
+fit_all <- lm(sentiment_score ~ followers_count + friends_count + listed_count + statuses_count + favourites_count, data = sentiment_tt)
+summary(fit_all)
+
+# model_negative_all
+fit_negative_all <- lm(negative ~ followers_count + friends_count + listed_count + statuses_count + favourites_count, data = sentiment_tt)
+summary(fit_negative_all)
+
+# model_positive_all
+fit_positive_all <- lm(negative ~ followers_count + friends_count + listed_count + statuses_count + favourites_count, data = sentiment_tt)
+summary(fit_positive_all)
+
+# model_group1_all
+sentiment_tt_1 <- filter(sentiment_tt, group == "group1")
+fit_group1 <- lm(sentiment_score ~ followers_count + friends_count + listed_count + statuses_count + favourites_count, data = sentiment_tt_1)
+summary(fit_group1)
+
+# model_group1_negative
+sentiment_tt_1 <- filter(sentiment_tt, group == "group1")
+fit_group1_negative <- lm(negative ~ followers_count + friends_count + listed_count + statuses_count + favourites_count, data = sentiment_tt_1)
+summary(fit_group1_negative)
+
+# model_group1_positive
+sentiment_tt_1 <- filter(sentiment_tt, group == "group1")
+fit_group1_positive <- lm(positive ~ followers_count + friends_count + listed_count + statuses_count + favourites_count, data = sentiment_tt_1)
+summary(fit_group1_positive)
+
+# model_group2_all
+sentiment_tt_2 <- filter(sentiment_tt, group == "group2")
+fit_group2 <- lm(sentiment_score ~ followers_count + friends_count + listed_count + statuses_count + favourites_count, data = sentiment_tt_2)
+summary(fit_group2)
+
+# model_group2_negative
+sentiment_tt_2 <- filter(sentiment_tt, group == "group2")
+fit_group2_negative <- lm(negative ~ followers_count + friends_count + listed_count + statuses_count + favourites_count, data = sentiment_tt_2)
+summary(fit_group2_negative)
+
+# model_group2_positive
+sentiment_tt_2 <- filter(sentiment_tt, group == "group2")
+fit_group2_positive <- lm(positive ~ followers_count + friends_count + listed_count + statuses_count + favourites_count, data = sentiment_tt_2)
+summary(fit_group2_positive)
+
+# model_group3_all
+sentiment_tt_3 <- filter(sentiment_tt, group == "group3")
+fit_group3 <- lm(sentiment_score ~ followers_count + friends_count + listed_count + statuses_count + favourites_count, data = sentiment_tt_3)
+summary(fit_group3)
+
+# model_group3_negative
+sentiment_tt_3 <- filter(sentiment_tt, group == "group3")
+fit_group3_negative <- lm(negative ~ followers_count + friends_count + listed_count + statuses_count + favourites_count, data = sentiment_tt_3)
+summary(fit_group3_negative)
+
+# model_group3_positive
+sentiment_tt_3 <- filter(sentiment_tt, group == "group3")
+fit_group3_positive <- lm(positive ~ followers_count + friends_count + listed_count + statuses_count + favourites_count, data = sentiment_tt_3)
+summary(fit_group3_positive)
+```
+
