@@ -548,4 +548,120 @@ sentiment_tt_3 <- filter(sentiment_tt, group == "group3")
 fit_group3_positive <- lm(positive ~ followers_count + friends_count + listed_count + statuses_count + favourites_count, data = sentiment_tt_3)
 summary(fit_group3_positive)
 ```
+```{r}
+# Statistical Analysis - Comparison the Favourites over three groups
+# Sentiment Score
+# Prepare dataset
+df_sentiment <- sentiment_tt %>%
+  select(group, sentiment_score)
 
+# Group 1 vs. Group 2
+# Test whether the two populations have the same variances
+df_sentiment_12 <- df_sentiment %>%
+  filter(group == "group1" | group == "group2")
+res.ftest <- var.test(sentiment_score ~ group, data = df_sentiment_12)
+res.ftest
+#The p-value of F-test is p < 0.05. It’s smaller than the significance level alpha = 0.05. In conclusion, there is a significant difference between the variances of the two sets of data.
+#t-test
+res_sentiment_12 <- t.test(sentiment_score ~ group, data = df_sentiment_12, var.equal = TRUE)
+res_sentiment_12
+# Group 2 vs. Group 3
+# Test whether the two populations have the same variances
+df_sentiment_23 <- df_sentiment %>%
+  filter(group == "group2" | group == "group3")
+res.ftest <- var.test(sentiment_score ~ group, data = df_sentiment_23)
+res.ftest
+#The p-value of F-test is p < 0.05. It’s smaller than the significance level alpha = 0.05. In conclusion, there is a significant difference between the variances of the two sets of data.
+#t-test
+res_sentiment_23 <- t.test(sentiment_score ~ group, data = df_sentiment_23, var.equal = TRUE)
+res_sentiment_23
+# Group 1 vs. Group 3
+# Test whether the two populations have the same variances
+df_sentiment_13 <- df_sentiment %>%
+  filter(group == "group1" | group == "group3")
+res.ftest <- var.test(sentiment_score ~ group, data = df_sentiment_13)
+res.ftest
+#The p-value of F-test is p < 0.05. It’s smaller than the significance level alpha = 0.05. In conclusion, there is a significant difference between the variances of the two sets of data.
+#t-test
+res_sentiment_13 <- t.test(sentiment_score ~ group, data = df_sentiment_13, var.equal = TRUE)
+res_sentiment_13
+```
+
+```{r}
+# Statistical Analysis - Comparison the Favourites over three groups
+# Positive
+# Prepare dataset
+df_postv <- sentiment_tt %>%
+  select(group, positive)
+
+# Group 1 vs. Group 2
+# Test whether the two populations have the same variances
+df_postv_12 <- df_postv %>%
+  filter(group == "group1" | group == "group2")
+res.ftest <- var.test(positive ~ group, data = df_postv_12)
+res.ftest
+#The p-value of F-test is p < 0.05. It’s smaller than the significance level alpha = 0.05. In conclusion, there is a significant difference between the variances of the two sets of data.
+#t-test
+res_postv_12 <- t.test(positive ~ group, data = df_postv_12, var.equal = TRUE)
+res_postv_12
+# Group 2 vs. Group 3
+# Test whether the two populations have the same variances
+df_postv_23 <- df_postv %>%
+  filter(group == "group2" | group == "group3")
+res.ftest <- var.test(positive ~ group, data = df_postv_23)
+res.ftest
+#The p-value of F-test is p < 0.05. It’s smaller than the significance level alpha = 0.05. In conclusion, there is a significant difference between the variances of the two sets of data.
+#t-test
+res_postv_23 <- t.test(positive ~ group, data = df_postv_23, var.equal = TRUE)
+res_postv_23
+# Group 1 vs. Group 3
+# Test whether the two populations have the same variances
+df_postv_13 <- df_postv %>%
+  filter(group == "group1" | group == "group3")
+res.ftest <- var.test(positive ~ group, data = df_postv_13)
+res.ftest
+#The p-value of F-test is p < 0.05. It’s smaller than the significance level alpha = 0.05. In conclusion, there is a significant difference between the variances of the two sets of data.
+#t-test
+res_postv_13 <- t.test(positive ~ group, data = df_postv_13, var.equal = TRUE)
+res_postv_13
+```
+
+```{r}
+# Statistical Analysis - Comparison the Favourites over three groups
+# Negative
+# Prepare dataset
+df_nega <- sentiment_tt %>%
+  select(group, negative)
+
+# Group 1 vs. Group 2
+# Test whether the two populations have the same variances
+df_nega_12 <- df_nega %>%
+  filter(group == "group1" | group == "group2")
+res.ftest <- var.test(negative ~ group, data = df_nega_12)
+res.ftest
+#The p-value of F-test is p < 0.05. It’s smaller than the significance level alpha = 0.05. In conclusion, there is a significant difference between the variances of the two sets of data.
+#t-test
+res_nega_12 <- t.test(negative ~ group, data = df_nega_12, var.equal = TRUE)
+res_nega_12
+
+# Group 2 vs. Group 3
+# Test whether the two populations have the same variances
+df_nega_23 <- df_nega %>%
+  filter(group == "group2" | group == "group3")
+res.ftest <- var.test(negative ~ group, data = df_nega_23)
+res.ftest
+#The p-value of F-test is p < 0.05. It’s smaller than the significance level alpha = 0.05. In conclusion, there is a significant difference between the variances of the two sets of data.
+#t-test
+res_nega_23 <- t.test(negative ~ group, data = df_nega_23, var.equal = TRUE)
+res_nega_23
+# Group 1 vs. Group 3
+# Test whether the two populations have the same variances
+df_nega_13 <- df_nega %>%
+  filter(group == "group1" | group == "group3")
+res.ftest <- var.test(negative ~ group, data = df_nega_13)
+res.ftest
+#The p-value of F-test is p < 0.05. It’s smaller than the significance level alpha = 0.05. In conclusion, there is a significant difference between the variances of the two sets of data.
+#t-test
+res_nega_13 <- t.test(negative ~ group, data = df_nega_13, var.equal = TRUE)
+res_nega_13
+```
