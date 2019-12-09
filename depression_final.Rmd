@@ -420,8 +420,8 @@ sentiment_data_1 <- data.frame(sentiment_type_1, score_1)
 yaxis_1 <- c(stm.positive_1, stm.anger_1, stm.anticipation_1, stm.disgust_1, stm.fear_1, stm.joy_1, stm.sadness_1, stm.surprise_1, stm.trust_1, stm.negative_1)
 xaxis <- c("Positive", "Anger", "Anticipation", "Disgust", "Fear", "Joy", "Sadness", "Surprise", "Trust", "Negative")
 color <- c("palegreen4", "orangered4", "palegreen3", "orangered3", "orangered4", "palegreen4", "orangered3", "palegreen3", "palegreen4", "orangered4")
-yrange_1 <- range(0, yaxis_1)
-barplot(yaxis_1, names.arg = xaxis, xlab = "Sentiment Categories", ylab = "Sentiment Score of Group 1", main = "Group 1: Twitter sentiment for 'Depresson'", col = color, border = "white", ylim = yrange, cex.axis = 0.6, cex.names = 0.6)
+yrange_1 <- range(0, 50000)
+barplot(yaxis_1, names.arg = xaxis, xlab = "Sentiment Categories", ylab = "Sentiment Score of Group 1", main = "Group 1: Twitter sentiment for 'Depresson'", col = color, border = "white", ylim = yrange_1, cex.axis = 0.6, cex.names = 0.6)
 stm_table_1 <- c(stm.positive_1, stm.anger_1, stm.anticipation_1, stm.disgust_1, stm.fear_1, stm.joy_1, stm.sadness_1, stm.surprise_1, stm.trust_1, stm.negative_1)
 ```
 
@@ -448,7 +448,7 @@ yaxis_2 <- c(stm.positive_2, stm.anger_2, stm.anticipation_2, stm.disgust_2, stm
 xaxis <- c("Positive", "Anger", "Anticipation", "Disgust", "Fear", "Joy", "Sadness", "Surprise", "Trust", "Negative")
 color <- c("palegreen4", "orangered4", "palegreen3", "orangered3", "orangered4", "palegreen4", "orangered3", "palegreen3", "palegreen4", "orangered4")
 yrange_2 <- range(0, yaxis_2)
-barplot(yaxis_2, names.arg = xaxis, xlab = "Sentiment Categories", ylab = "Sentiment Score of Group 2", main = "Group 2: Twitter sentiment for 'Depresson'", col = color, border = "white", ylim = yrange, cex.axis = 0.6, cex.names = 0.6)
+barplot(yaxis_2, names.arg = xaxis, xlab = "Sentiment Categories", ylab = "Sentiment Score of Group 2", main = "Group 2: Twitter sentiment for 'Depresson'", col = color, border = "white", ylim = yrange_2, cex.axis = 0.6, cex.names = 0.6)
 stm_table_2 <- c(stm.positive_2, stm.anger_2, stm.anticipation_2, stm.disgust_2, stm.fear_2, stm.joy_2, stm.sadness_2, stm.surprise_2, stm.trust_2, stm.negative_2)
 ```
 
@@ -474,8 +474,8 @@ sentiment_data_3 <- data.frame(sentiment_type_3, score_3)
 yaxis_3 <- c(stm.positive_3, stm.anger_3, stm.anticipation_3, stm.disgust_3, stm.fear_3, stm.joy_3, stm.sadness_3, stm.surprise_3, stm.trust_3, stm.negative_3)
 xaxis <- c("Positive", "Anger", "Anticipation", "Disgust", "Fear", "Joy", "Sadness", "Surprise", "Trust", "Negative")
 color <- c("palegreen4", "orangered4", "palegreen3", "orangered3", "orangered4", "palegreen4", "orangered3", "palegreen3", "palegreen4", "orangered4")
-yrange_3 <- range(0, yaxis_3)
-barplot(yaxis_3, names.arg = xaxis, xlab = "Sentiment Categories", ylab = "Sentiment Score of Group 3", main = "Group 3: Twitter sentiment for 'Depresson'", col = color, border = "white", ylim = yrange, cex.axis = 0.6, cex.names = 0.6)
+yrange_3 <- range(0, 50000)
+barplot(yaxis_3, names.arg = xaxis, xlab = "Sentiment Categories", ylab = "Sentiment Score of Group 3", main = "Group 3: Twitter sentiment for 'Depresson'", col = color, border = "white", ylim = yrange_3, cex.axis = 0.6, cex.names = 0.6)
 stm_table_3 <- c(stm.positive_3, stm.anger_3, stm.anticipation_3, stm.disgust_3, stm.fear_3, stm.joy_3, stm.sadness_3, stm.surprise_3, stm.trust_3, stm.negative_3)
 ```
 
