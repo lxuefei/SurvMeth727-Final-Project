@@ -479,6 +479,7 @@ barplot(yaxis_3, names.arg = xaxis, xlab = "Sentiment Categories", ylab = "Senti
 stm_table_3 <- c(stm.positive_3, stm.anger_3, stm.anticipation_3, stm.disgust_3, stm.fear_3, stm.joy_3, stm.sadness_3, stm.surprise_3, stm.trust_3, stm.negative_3)
 ```
 
+```{r}
 # linear regression
 
 # Merge the columns of sentiment score into data
@@ -487,7 +488,9 @@ sentiment_tt <- cbind(dp_all, sentiment_test)
 
 # Convert the negative sentiment score to negative integers, add up to get a total sentiment score
 sentiment_tt$sentiment_score <- sentiment_tt$positive + sentiment_tt$negative*(-1)
+```
 
+```{r}
 # model_all
 fit_all <- lm(sentiment_score ~ followers_count + friends_count + listed_count + statuses_count + favourites_count, data = sentiment_tt)
 summary(fit_all)
