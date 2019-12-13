@@ -148,6 +148,20 @@ dp_agg <- dp_all %>%
 dp_stats <- aggregate(dp_agg[,(1:6)], by = list(dp_agg$group), FUN = mean)
 colnames(dp_stats)[1] <- "group"
 dp_stats
+
+summary(dp_all$display_text_width) 
+summary(dp_all$followers_count) 
+summary(dp_all$friends_count) 
+summary(dp_all$listed_count) 
+summary(dp_all$statuses_count) 
+summary(dp_all$favourites_count)
+print(sd(dp_all$display_text_width))
+print(sd(dp_all$followers_count))
+print(sd(dp_all$friends_count))
+print(sd(dp_all$listed_count))
+print(sd(dp_all$statuses_count))
+print(sd(dp_all$favourites_count))
+
 # 定量数据图
 p1 <- ggplot(data = dp_stats, aes(y = followers_count, x = group, fill = group)) +
   geom_bar(stat="identity") +
