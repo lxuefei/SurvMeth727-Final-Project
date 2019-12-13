@@ -165,16 +165,16 @@ print(sd(dp_all$favourites_count))
 # 定量数据图
 p1 <- ggplot(data = dp_stats, aes(y = followers_count, x = group, fill = group)) +
   geom_bar(stat="identity") +
-  theme_minimal()
+  theme_classic()
 p2 <- ggplot(data = dp_stats, aes(y = friends_count, x = group, fill = group)) +
   geom_bar(stat="identity") +
-  theme_minimal()
+  theme_classic()
 p3 <- ggplot(data = dp_stats, aes(y = statuses_count, x = group, fill = group)) +
   geom_bar(stat="identity") +
-  theme_minimal()
+  theme_classic()
 p4 <- ggplot(data = dp_stats, aes(y = favourites_count, x = group, fill = group)) +
   geom_bar(stat="identity") +
-  theme_minimal()
+  theme_classic()
 ggarrange(p1,p2,p3,p4, ncol=2,nrow=2,labels=c("A","B","C","D"))
   
 # Descriptive statistics - 分类数据
