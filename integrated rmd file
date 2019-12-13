@@ -284,3 +284,162 @@ dp_all %>%
 ```
 
 
+# Statistical Analysis - Comparison the Followers over three groups
+# Prepare dataset
+df_folw <- cbind.fill(dp_agg$group, dp_agg$followers_count)
+colnames(df_folw) <- c("group", "folw_n")
+# Shapiro-Wilk normality test for three groups
+# Error in shapiro.test(folw_n[group == "group1"]) : sample size must be between 3 and 5000
+#with(df_folw, shapiro.test(folw_n[group == "group1"])) 
+#with(df_folw, shapiro.test(folw_n[group == "group2"])) 
+#with(df_folw, shapiro.test(folw_n[group == "group3"])) 
+# From the output, the two p-values are smaller than the significance level 0.05 implying that the distribution of the data are not significantly different from the normal distribution. In other words, we cannot assume the normality.
+# Group 1 vs. Group 2
+# Test whether the two populations have the same variances
+df_folw_12 <- df_folw %>%
+  filter(group == "depression group" | group == "control group")
+res.ftest <- var.test(folw_n ~ group, data = df_folw_12)
+res.ftest
+#The p-value of F-test is p < 0.05. It’s smaller than the significance level alpha = 0.05. In conclusion, there is a significant difference between the variances of the two sets of data.
+#t-test
+res_folw_12 <- t.test(folw_n ~ group, data = df_folw_12, var.equal = TRUE)
+res_folw_12
+# Group 2 vs. Group 3
+# Test whether the two populations have the same variances
+df_folw_23 <- df_folw %>%
+  filter(group == "control group" | group == "diagnosed group")
+res.ftest <- var.test(folw_n ~ group, data = df_folw_23)
+res.ftest
+#The p-value of F-test is p < 0.05. It’s smaller than the significance level alpha = 0.05. In conclusion, there is a significant difference between the variances of the two sets of data.
+#t-test
+res_folw_23 <- t.test(folw_n ~ group, data = df_folw_23, var.equal = TRUE)
+res_folw_23
+# Group 1 vs. Group 3
+# Test whether the two populations have the same variances
+df_folw_13 <- df_folw %>%
+  filter(group == "depression group" | group == "diagnosed group")
+res.ftest <- var.test(folw_n ~ group, data = df_folw_13)
+res.ftest
+#The p-value of F-test is p < 0.05. It’s smaller than the significance level alpha = 0.05. In conclusion, there is a significant difference between the variances of the two sets of data.
+#t-test
+res_folw_13 <- t.test(folw_n ~ group, data = df_folw_13, var.equal = TRUE)
+res_folw_13
+```
+
+
+```{r}
+# Statistical Analysis - Comparison the Friends over three groups
+# Prepare dataset
+df_frid <- cbind.fill(dp_agg$group, dp_agg$friends_count)
+colnames(df_frid) <- c("group", "frid_n")
+
+# Group 1 vs. Group 2
+# Test whether the two populations have the same variances
+df_frid_12 <- df_frid %>%
+  filter(group == "depression group" | group == "control group")
+res.ftest <- var.test(frid_n ~ group, data = df_frid_12)
+res.ftest
+#The p-value of F-test is p < 0.05. It’s smaller than the significance level alpha = 0.05. In conclusion, there is a significant difference between the variances of the two sets of data.
+#t-test
+res_frid_12 <- t.test(frid_n ~ group, data = df_frid_12, var.equal = TRUE)
+res_frid_12
+# Group 2 vs. Group 3
+# Test whether the two populations have the same variances
+df_frid_23 <- df_frid %>%
+  filter(group == "control group" | group == "diagnosed group")
+res.ftest <- var.test(frid_n ~ group, data = df_frid_23)
+res.ftest
+#The p-value of F-test is p < 0.05. It’s smaller than the significance level alpha = 0.05. In conclusion, there is a significant difference between the variances of the two sets of data.
+#t-test
+res_frid_23 <- t.test(frid_n ~ group, data = df_frid_23, var.equal = TRUE)
+res_frid_23
+# Group 1 vs. Group 3
+# Test whether the two populations have the same variances
+df_frid_13 <- df_frid %>%
+  filter(group == "depression group" | group == "diagnosed group")
+res.ftest <- var.test(frid_n ~ group, data = df_frid_13)
+res.ftest
+#The p-value of F-test is p < 0.05. It’s smaller than the significance level alpha = 0.05. In conclusion, there is a significant difference between the variances of the two sets of data.
+#t-test
+res_frid_13 <- t.test(frid_n ~ group, data = df_frid_13, var.equal = TRUE)
+res_frid_13
+```
+
+
+```{r}
+# Statistical Analysis - Comparison the Statuses over three groups
+# Prepare dataset
+df_stat <- cbind.fill(dp_agg$group, dp_agg$statuses_count)
+colnames(df_stat) <- c("group", "stat_n")
+
+# Group 1 vs. Group 2
+# Test whether the two populations have the same variances
+df_stat_12 <- df_stat %>%
+  filter(group == "depression group" | group == "control group")
+res.ftest <- var.test(stat_n ~ group, data = df_stat_12)
+res.ftest
+#The p-value of F-test is p < 0.05. It’s smaller than the significance level alpha = 0.05. In conclusion, there is a significant difference between the variances of the two sets of data.
+#t-test
+res_stat_12 <- t.test(stat_n ~ group, data = df_stat_12, var.equal = TRUE)
+res_stat_12
+# Group 2 vs. Group 3
+# Test whether the two populations have the same variances
+df_stat_23 <- df_stat %>%
+  filter(group == "control group" | group == "diagnosed group")
+res.ftest <- var.test(stat_n ~ group, data = df_stat_23)
+res.ftest
+#The p-value of F-test is p < 0.05. It’s smaller than the significance level alpha = 0.05. In conclusion, there is a significant difference between the variances of the two sets of data.
+#t-test
+res_stat_23 <- t.test(stat_n ~ group, data = df_stat_23, var.equal = TRUE)
+res_stat_23
+# Group 1 vs. Group 3
+# Test whether the two populations have the same variances
+df_stat_13 <- df_stat %>%
+  filter(group == "depression group" | group == "diagnosed group")
+res.ftest <- var.test(stat_n ~ group, data = df_stat_13)
+res.ftest
+#The p-value of F-test is p < 0.05. It’s smaller than the significance level alpha = 0.05. In conclusion, there is a significant difference between the variances of the two sets of data.
+#t-test
+res_stat_13 <- t.test(stat_n ~ group, data = df_stat_13, var.equal = TRUE)
+res_stat_13
+```
+
+
+```{r}
+# Statistical Analysis - Comparison the Favourites over three groups
+# Prepare dataset
+df_favr <- cbind.fill(dp_agg$group, dp_agg$favourites_count)
+colnames(df_favr) <- c("group", "favr_n")
+
+# Group 1 vs. Group 2
+# Test whether the two populations have the same variances
+df_favr_12 <- df_favr %>%
+  filter(group == "depression group" | group == "control group")
+res.ftest <- var.test(favr_n ~ group, data = df_favr_12)
+res.ftest
+#The p-value of F-test is p < 0.05. It’s smaller than the significance level alpha = 0.05. In conclusion, there is a significant difference between the variances of the two sets of data.
+#t-test
+res_favr_12 <- t.test(favr_n ~ group, data = df_favr_12, var.equal = TRUE)
+res_favr_12
+# Group 2 vs. Group 3
+# Test whether the two populations have the same variances
+df_favr_23 <- df_favr %>%
+  filter(group == "control group" | group == "diagnosed group")
+res.ftest <- var.test(favr_n ~ group, data = df_favr_23)
+res.ftest
+#The p-value of F-test is p < 0.05. It’s smaller than the significance level alpha = 0.05. In conclusion, there is a significant difference between the variances of the two sets of data.
+#t-test
+res_favr_23 <- t.test(favr_n ~ group, data = df_favr_23, var.equal = TRUE)
+res_favr_23
+# Group 1 vs. Group 3
+# Test whether the two populations have the same variances
+df_favr_13 <- df_favr %>%
+  filter(group == "depression group" | group == "diagnosed group")
+res.ftest <- var.test(favr_n ~ group, data = df_favr_13)
+res.ftest
+#The p-value of F-test is p < 0.05. It’s smaller than the significance level alpha = 0.05. In conclusion, there is a significant difference between the variances of the two sets of data.
+#t-test
+res_favr_13 <- t.test(favr_n ~ group, data = df_favr_13, var.equal = TRUE)
+res_favr_13
+```
+
