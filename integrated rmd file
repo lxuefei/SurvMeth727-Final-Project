@@ -78,3 +78,48 @@ dp1 <- dp1[sample(nrow(dp1), 20000), ]
 dp2 <- dp2[sample(nrow(dp2), 20000), ]
 dp3 <- dp3[sample(nrow(dp3), 20000), ]
 ```
+```{r}
+# Create wordclouds for each group
+# Group 1
+dp1_text <- as.character(dp1$text)
+seg <- qseg[dp1_text] #使用qseg类型分词
+seg <- seg[nchar(seg)>1] #去除字符长度小于1的词
+seg
+# Set stopwords
+all_stops <- c("and","of","http","to","for","in","on","the","with","at","or","from")
+seg <- removeWords(seg, all_stops)
+seg <- table(seg)
+seg_50 <- sort(seg, decreasing = TRUE)[1:50]
+#获得词频数前50的词
+seg_50
+barplot(seg_50)
+wordcloud2(seg,size = 2, minRotation = -pi/2, maxRotation = -pi/2) # Create wordcloud
+
+# Group 2
+dp2_text <- as.character(dp2$text)
+seg <- qseg[dp2_text] #使用qseg类型分词
+seg <- seg[nchar(seg)>1] #去除字符长度小于1的词
+seg
+
+seg <- table(seg)
+seg_50 <- sort(seg, decreasing = TRUE)[1:50]
+#获得词频数前50的词
+seg_50
+barplot(seg_50)
+wordcloud2(seg,size = 2, minRotation = -pi/2, maxRotation = -pi/2) # Create wordcloud
+
+# Group 3
+dp3_text <- as.character(dp3$text)
+seg <- qseg[dp3_text] #使用qseg类型分词
+seg <- seg[nchar(seg)>1] #去除字符长度小于1的词
+seg
+# Set stopwords
+all_stops <- c("and","of","http","to","for","in","on","the","with","at","or","from")
+seg <- removeWords(seg, all_stops)
+seg <- table(seg)
+seg_50 <- sort(seg, decreasing = TRUE)[1:50]
+#获得词频数前50的词
+seg_50
+barplot(seg_50)
+wordcloud2(seg,size = 2, minRotation = -pi/2, maxRotation = -pi/2) # Create wordcloud
+```
