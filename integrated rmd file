@@ -1,0 +1,80 @@
+---
+title: "dp-analysis-integrated"
+output: html_document
+---
+```{r}
+#install.packages("wordcloud2")
+#install.packages("lubridate")
+#install.packages("jiebaR")
+#install.packages("jiebaRD")
+#install.packages("vcd")
+#install.packages("ggpubr")
+#install.packages("rowr")
+#install.packages("Rsentiment")
+library(rtweet)
+library(twitteR)
+library(syuzhet)
+library(tm)
+library(SnowballC)
+library(tidytext)
+library(ggmap)
+library(dplyr)
+library(ggplot2)
+library(lubridate)
+library(wordcloud2)
+library(jiebaR)
+library(jiebaRD)
+library(vcd)
+library(ggpubr)
+library(rowr)
+library(readr)
+library(stringr)
+library(DT)
+```
+
+```{r}
+# import data to excel format
+dp1_1 <- read.csv("dp1-1.csv")
+dp1_2 <- read.csv("dp1-2.csv")
+dp1_3 <- read.csv("dp1-3.csv")
+dp1_4 <- read.csv("dp1-4.csv")
+dp1_5 <- read.csv("dp1-5.csv")
+
+dp2_1 <- read.csv("dp2-1.csv")
+dp2_2 <- read.csv("dp2-2.csv")
+dp2_3 <- read.csv("dp2-3.csv")
+dp2_4 <- read.csv("dp2-4.csv")
+dp2_5 <- read.csv("dp2-5.csv")
+
+dp3_1 <- read.csv("dp3-1.csv")
+dp3_2 <- read.csv("dp3-2.csv")
+dp3_3 <- read.csv("dp3-3.csv")
+dp3_4 <- read.csv("dp3-4.csv")
+dp3_5 <- read.csv("dp3-5.csv")
+dp3_6 <- read.csv("dp3-6.csv")
+dp3_7 <- read.csv("dp3-7.csv")
+dp3_8 <- read.csv("dp3-8.csv")
+dp3_9 <- read.csv("dp3-9.csv")
+dp3_10 <- read.csv("dp3-10.csv")
+```
+
+```{r}
+# Conbine data set
+dp1 <- rbind(dp1_1, dp1_2, dp1_3, dp1_4, dp1_5)
+dp2 <- rbind(dp2_1, dp2_2, dp2_3, dp2_4, dp2_5)
+dp3 <- rbind(dp3_1, dp3_2, dp3_3, dp3_4, dp3_5, dp3_6, dp3_7, dp3_8, dp3_9, dp3_10)
+```
+
+```{r}
+# Delete duplicate data
+dp1 <- dp1[!duplicated(dp1),]
+dp2 <- dp2[!duplicated(dp2),] 
+dp3 <- dp3[!duplicated(dp3),] #删掉所有列上都重复的
+```
+
+```{r}
+# Random sample, 20000 for each group
+dp1 <- dp1[sample(nrow(dp1), 20000), ]
+dp2 <- dp2[sample(nrow(dp2), 20000), ]
+dp3 <- dp3[sample(nrow(dp3), 20000), ]
+```
