@@ -284,6 +284,7 @@ dp_all %>%
 ```
 
 
+```{r}
 # Statistical Analysis - Comparison the Followers over three groups
 # Prepare dataset
 df_folw <- cbind.fill(dp_agg$group, dp_agg$followers_count)
