@@ -69,10 +69,10 @@ dp3 <- rbind(dp3_1, dp3_2, dp3_3, dp3_4, dp3_5, dp3_6, dp3_7, dp3_8, dp3_9, dp3_
 
 
 ```{r}
-# Delete duplicate data
+# Delete data which is duplicated in every columns
 dp1 <- dp1[!duplicated(dp1),]
 dp2 <- dp2[!duplicated(dp2),] 
-dp3 <- dp3[!duplicated(dp3),] #删掉所有列上都重复的
+dp3 <- dp3[!duplicated(dp3),] 
 ```
 
 
@@ -88,43 +88,43 @@ dp3 <- dp3[sample(nrow(dp3), 20000), ]
 # Create wordclouds for each group
 # Group 1
 dp1_text <- as.character(dp1$text)
-seg <- qseg[dp1_text] #使用qseg类型分词
-seg <- seg[nchar(seg)>1] #去除字符长度小于1的词
+seg <- qseg[dp1_text] # use seg to cut vocabulary
+seg <- seg[nchar(seg)>1] # delete words that less than 1 unit
 seg
 # Set stopwords
 all_stops <- c("and","of","http","to","for","in","on","the","with","at","or","from")
 seg <- removeWords(seg, all_stops)
 seg <- table(seg)
 seg_50 <- sort(seg, decreasing = TRUE)[1:50]
-#获得词频数前50的词
+# get word frequency (top 50)
 seg_50
 barplot(seg_50)
 wordcloud2(seg,size = 2, minRotation = -pi/2, maxRotation = -pi/2) # Create wordcloud
 
 # Group 2
 dp2_text <- as.character(dp2$text)
-seg <- qseg[dp2_text] #使用qseg类型分词
-seg <- seg[nchar(seg)>1] #去除字符长度小于1的词
+seg <- qseg[dp2_text] # use seg to cut vocabulary
+seg <- seg[nchar(seg)>1] # delete words that less than 1 unit
 seg
 
 seg <- table(seg)
 seg_50 <- sort(seg, decreasing = TRUE)[1:50]
-#获得词频数前50的词
+# get word frequency (top 50)
 seg_50
 barplot(seg_50)
 wordcloud2(seg,size = 2, minRotation = -pi/2, maxRotation = -pi/2) # Create wordcloud
 
 # Group 3
 dp3_text <- as.character(dp3$text)
-seg <- qseg[dp3_text] #使用qseg类型分词
-seg <- seg[nchar(seg)>1] #去除字符长度小于1的词
+seg <- qseg[dp3_text] # use seg to cut vocabulary
+seg <- seg[nchar(seg)>1] # delete words that less than 1 unit
 seg
 # Set stopwords
 all_stops <- c("and","of","http","to","for","in","on","the","with","at","or","from")
 seg <- removeWords(seg, all_stops)
 seg <- table(seg)
 seg_50 <- sort(seg, decreasing = TRUE)[1:50]
-#获得词频数前50的词
+# get word frequency (top 50)
 seg_50
 barplot(seg_50)
 wordcloud2(seg,size = 2, minRotation = -pi/2, maxRotation = -pi/2) # Create wordcloud
@@ -288,12 +288,6 @@ dp_all %>%
 # Prepare dataset
 df_folw <- cbind.fill(dp_agg$group, dp_agg$followers_count)
 colnames(df_folw) <- c("group", "folw_n")
-# Shapiro-Wilk normality test for three groups
-# Error in shapiro.test(folw_n[group == "group1"]) : sample size must be between 3 and 5000
-#with(df_folw, shapiro.test(folw_n[group == "group1"])) 
-#with(df_folw, shapiro.test(folw_n[group == "group2"])) 
-#with(df_folw, shapiro.test(folw_n[group == "group3"])) 
-# From the output, the two p-values are smaller than the significance level 0.05 implying that the distribution of the data are not significantly different from the normal distribution. In other words, we cannot assume the normality.
 # Group 1 vs. Group 2
 # Test whether the two populations have the same variances
 df_folw_12 <- df_folw %>%
