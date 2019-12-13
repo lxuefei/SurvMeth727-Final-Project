@@ -437,3 +437,212 @@ res_favr_13 <- t.test(favr_n ~ group, data = df_favr_13, var.equal = TRUE)
 res_favr_13
 ```
 
+
+```{r}
+# Time analysis
+# Extract date to cover the NA
+dp_all$date <- as.Date(dp_all$time)
+# Create new time variables: roundhour, hour, roundmin, minute
+ymd(19970316); myd(03199716); dmy(16031997)
+test_date <- ymd_hms("1997-03-16 12:01:30")
+dp_all$roundhour <- round_date(dp_all$time, 'hour')
+dp_all$roundmin <- round_date(dp_all$time, "minute")
+dp_all$hour <- hour(dp_all$roundhour)
+dp_all$minute <- minute(dp_all$roundmin)
+# Graph twitter counts in 24 hours
+dp_all %>%
+  group_by(group, hour) %>%
+  summarise(total = n()) %>%
+  filter(group == "depression group" | group == "diagnosed group") %>%
+  ggplot() +
+  geom_bar(mapping = aes(x = hour, y = total, fill = group), stat = "identity")+
+  geom_line(mapping = aes(x = hour, y = total, fill = group), colour = "navy") +
+  theme_classic() 
+# Focus on group 3
+dp_all %>%
+  group_by(group, hour) %>%
+  summarise(total = n()) %>%
+  filter(group == "diagnosed group") %>%
+  ggplot() +
+  geom_bar(mapping = aes(x = hour, y = total), stat = "identity", fill = "lightblue") +
+  geom_line(mapping = aes(x = hour, y = total), colour = "navy") +
+  theme_classic()
+```
+
+
+```{r}
+# Sentiment analysis
+# Extract text
+dp_all$twttext <- as.character(dp_all$text)
+# Text cleaning
+dp_all$twttext %<>%
+  gsub("(RT|via)((?:\\b\\w*@\\w+)+)", " ", .) %>%
+  gsub("http[^[:blank:]]+", " ", .) %>%
+  gsub("@\\w+", " ", .) %>%
+  gsub("[[:punct:]]", " ", .) %>%
+  gsub("[^[:alnum:]]", " ", .)
+ 
+# All the groups
+sentiment <- get_nrc_sentiment(dp_all$twttext, language = 'english')
+stm.positive <- sum(sentiment$positive)
+stm.anger <- sum(sentiment$anger)
+stm.anticipation <- sum(sentiment$anticipation)
+stm.disgust <- sum(sentiment$disgust)
+stm.fear <- sum(sentiment$fear)
+stm.joy <- sum(sentiment$joy)
+stm.sadness <- sum(sentiment$sadness)
+stm.surprise <- sum(sentiment$surprise)
+stm.trust <- sum(sentiment$trust)
+stm.negative <- sum(sentiment$negative)
+```
+
+
+# Group by groups
+
+```{r}
+# Group 1 sentiment score bar
+dp_all_1 <- filter(dp_all, group == "depression group") 
+sentiment_1 <- get_nrc_sentiment(dp_all_1$twttext, language = 'english') 
+stm.positive_1 <- sum(sentiment_1$positive) 
+stm.anger_1 <- sum(sentiment_1$anger) 
+stm.anticipation_1 <- sum(sentiment_1$anticipation) 
+stm.disgust_1 <- sum(sentiment_1$disgust) 
+stm.fear_1 <- sum(sentiment_1$fear) 
+stm.joy_1 <- sum(sentiment_1$joy) 
+stm.sadness_1 <- sum(sentiment_1$sadness) 
+stm.surprise_1 <- sum(sentiment_1$surprise) 
+stm.trust_1 <- sum(sentiment_1$trust) 
+stm.negative_1 <- sum(sentiment_1$negative) 
+
+sentiment_type_1 <- c("Positive", "Anger", "Anticipation", "Disgust", "Fear", "Joy", "Sadness", "Surprise", "Trust", "Negative") 
+score_1 <- c(stm.positive_1, stm.anger_1, stm.anticipation_1, stm.disgust_1, stm.fear_1, stm.joy_1, stm.sadness_1, stm.surprise_1, stm.trust_1, stm.negative_1) 
+sentiment_data_1 <- data.frame(sentiment_type_1, score_1)
+yaxis_1 <- c(stm.positive_1, stm.anger_1, stm.anticipation_1, stm.disgust_1, stm.fear_1, stm.joy_1, stm.sadness_1, stm.surprise_1, stm.trust_1, stm.negative_1)
+xaxis <- c("Positive", "Anger", "Anticipation", "Disgust", "Fear", "Joy", "Sadness", "Surprise", "Trust", "Negative")
+color <- c("palegreen4", "orangered4", "palegreen3", "orangered3", "orangered4", "palegreen4", "orangered3", "palegreen3", "palegreen4", "orangered4")
+yrange_1 <- range(0, 50000)
+barplot(yaxis_1, names.arg = xaxis, xlab = "Sentiment Categories", ylab = "Sentiment Score of depression group", main = "Depression group: Twitter sentiment for 'Depresson'", col = color, border = "white", ylim = yrange_1, cex.axis = 0.6, cex.names = 0.6)
+stm_table_1 <- c(stm.positive_1, stm.anger_1, stm.anticipation_1, stm.disgust_1, stm.fear_1, stm.joy_1, stm.sadness_1, stm.surprise_1, stm.trust_1, stm.negative_1)
+```
+
+
+```{r}
+# Group 2 sentiment score bar
+dp_all_2 <- filter(dp_all, group == "control group") 
+sentiment_2 <- get_nrc_sentiment(dp_all_2$twttext, language = 'english') 
+stm.positive_2 <- sum(sentiment_2$positive) 
+stm.anger_2 <- sum(sentiment_2$anger) 
+stm.anticipation_2 <- sum(sentiment_2$anticipation) 
+stm.disgust_2 <- sum(sentiment_2$disgust) 
+stm.fear_2 <- sum(sentiment_2$fear) 
+stm.joy_2 <- sum(sentiment_2$joy) 
+stm.sadness_2 <- sum(sentiment_2$sadness) 
+stm.surprise_2 <- sum(sentiment_2$surprise) 
+stm.trust_2 <- sum(sentiment_2$trust) 
+stm.negative_2 <- sum(sentiment_2$negative) 
+
+sentiment_type_2 <- c("Positive", "Anger", "Anticipation", "Disgust", "Fear", "Joy", "Sadness", "Surprise", "Trust", "Negative") 
+score_2 <- c(stm.positive_2, stm.anger_2, stm.anticipation_2, stm.disgust_2, stm.fear_2, stm.joy_2, stm.sadness_2, stm.surprise_2, stm.trust_2, stm.negative_2) 
+sentiment_data_2 <- data.frame(sentiment_type_2, score_2)
+yaxis_2 <- c(stm.positive_2, stm.anger_2, stm.anticipation_2, stm.disgust_2, stm.fear_2, stm.joy_2, stm.sadness_2, stm.surprise_2, stm.trust_2, stm.negative_2)
+xaxis <- c("Positive", "Anger", "Anticipation", "Disgust", "Fear", "Joy", "Sadness", "Surprise", "Trust", "Negative")
+color <- c("palegreen4", "orangered4", "palegreen3", "orangered3", "orangered4", "palegreen4", "orangered3", "palegreen3", "palegreen4", "orangered4")
+yrange_2 <- range(0, yaxis_2)
+barplot(yaxis_2, names.arg = xaxis, xlab = "Sentiment Categories", ylab = "Sentiment Score of control group", main = "Control group: Twitter sentiment for 'Depresson'", col = color, border = "white", ylim = yrange_2, cex.axis = 0.6, cex.names = 0.6)
+stm_table_2 <- c(stm.positive_2, stm.anger_2, stm.anticipation_2, stm.disgust_2, stm.fear_2, stm.joy_2, stm.sadness_2, stm.surprise_2, stm.trust_2, stm.negative_2)
+```
+
+```{r}
+# Group 3 sentiment score bar
+dp_all_3 <- filter(dp_all, group == "diagnosed group") 
+sentiment_3 <- get_nrc_sentiment(dp_all_3$twttext, language = 'english') 
+stm.positive_3 <- sum(sentiment_3$positive) 
+stm.anger_3 <- sum(sentiment_3$anger) 
+stm.anticipation_3 <- sum(sentiment_3$anticipation) 
+stm.disgust_3 <- sum(sentiment_3$disgust) 
+stm.fear_3 <- sum(sentiment_3$fear) 
+stm.joy_3 <- sum(sentiment_3$joy) 
+stm.sadness_3 <- sum(sentiment_3$sadness) 
+stm.surprise_3 <- sum(sentiment_3$surprise) 
+stm.trust_3 <- sum(sentiment_3$trust) 
+stm.negative_3 <- sum(sentiment_3$negative) 
+
+sentiment_type_3 <- c("Positive", "Anger", "Anticipation", "Disgust", "Fear", "Joy", "Sadness", "Surprise", "Trust", "Negative") 
+score_3 <- c(stm.positive_3, stm.anger_3, stm.anticipation_3, stm.disgust_3, stm.fear_3, stm.joy_3, stm.sadness_3, stm.surprise_3, stm.trust_3, stm.negative_3) 
+sentiment_data_3 <- data.frame(sentiment_type_3, score_3)
+yaxis_3 <- c(stm.positive_3, stm.anger_3, stm.anticipation_3, stm.disgust_3, stm.fear_3, stm.joy_3, stm.sadness_3, stm.surprise_3, stm.trust_3, stm.negative_3)
+xaxis <- c("Positive", "Anger", "Anticipation", "Disgust", "Fear", "Joy", "Sadness", "Surprise", "Trust", "Negative")
+color <- c("palegreen4", "orangered4", "palegreen3", "orangered3", "orangered4", "palegreen4", "orangered3", "palegreen3", "palegreen4", "orangered4")
+yrange_3 <- range(0, yaxis_3)
+barplot(yaxis_3, names.arg = xaxis, xlab = "Sentiment Categories", ylab = "Sentiment Score of diagnosed group", main = "Diagnosed group: Twitter sentiment for 'Depresson'", col = color, border = "white", ylim = yrange_3, cex.axis = 0.6, cex.names = 0.6)
+stm_table_3 <- c(stm.positive_3, stm.anger_3, stm.anticipation_3, stm.disgust_3, stm.fear_3, stm.joy_3, stm.sadness_3, stm.surprise_3, stm.trust_3, stm.negative_3)
+```
+
+
+```{r}
+# linear regression
+
+# Merge the columns of sentiment score into data
+sentiment_test <- get_nrc_sentiment(dp_all$twttext, language = 'english')
+sentiment_tt <- cbind(dp_all, sentiment_test)
+
+# Convert the negative sentiment score to negative integers, add up to get a total sentiment score
+sentiment_tt$sentiment_score <- sentiment_tt$positive + sentiment_tt$negative*(-1)
+
+# model_all
+fit_all <- lm(sentiment_score ~ followers_count + friends_count + listed_count + statuses_count + favourites_count, data = sentiment_normal_test)
+summary(fit_all)
+
+# model_negative_all
+fit_negative_all <- lm(negative ~ followers_count + friends_count + listed_count + statuses_count + favourites_count, data = sentiment_tt)
+summary(fit_negative_all)
+
+# model_positive_all
+fit_positive_all <- lm(negative ~ followers_count + friends_count + listed_count + statuses_count + favourites_count, data = sentiment_tt)
+summary(fit_positive_all)
+
+# model_group1_all
+sentiment_tt_1 <- filter(sentiment_tt, group == "depression group")
+fit_group1 <- lm(sentiment_score ~ followers_count + friends_count + listed_count + statuses_count + favourites_count, data = sentiment_tt_1)
+summary(fit_group1)
+
+# model_group1_negative
+sentiment_tt_1 <- filter(sentiment_tt, group == "depression group")
+fit_group1_negative <- lm(negative ~ followers_count + friends_count + listed_count + statuses_count + favourites_count, data = sentiment_tt_1)
+summary(fit_group1_negative)
+
+# model_group1_positive
+sentiment_tt_1 <- filter(sentiment_tt, group == "depression group")
+fit_group1_positive <- lm(positive ~ followers_count + friends_count + listed_count + statuses_count + favourites_count, data = sentiment_tt_1)
+summary(fit_group1_positive)
+
+# model_group2_all
+sentiment_tt_2 <- filter(sentiment_tt, group == "control group")
+fit_group2 <- lm(sentiment_score ~ followers_count + friends_count + listed_count + statuses_count + favourites_count, data = sentiment_tt_2)
+summary(fit_group2)
+
+# model_group2_negative
+sentiment_tt_2 <- filter(sentiment_tt, group == "control group")
+fit_group2_negative <- lm(negative ~ followers_count + friends_count + listed_count + statuses_count + favourites_count, data = sentiment_tt_2)
+summary(fit_group2_negative)
+
+# model_group2_positive
+sentiment_tt_2 <- filter(sentiment_tt, group == "control group")
+fit_group2_positive <- lm(positive ~ followers_count + friends_count + listed_count + statuses_count + favourites_count, data = sentiment_tt_2)
+summary(fit_group2_positive)
+
+# model_group3_all
+sentiment_tt_3 <- filter(sentiment_tt, group == "diagnosed group")
+fit_group3 <- lm(sentiment_score ~ followers_count + friends_count + listed_count + statuses_count + favourites_count, data = sentiment_tt_3)
+summary(fit_group3)
+
+# model_group3_negative
+sentiment_tt_3 <- filter(sentiment_tt, group == "diagnosed group")
+fit_group3_negative <- lm(negative ~ followers_count + friends_count + listed_count + statuses_count + favourites_count, data = sentiment_tt_3)
+summary(fit_group3_negative)
+
+# model_group3_positive
+sentiment_tt_3 <- filter(sentiment_tt, group == "diagnosed group")
+fit_group3_positive <- lm(positive ~ followers_count + friends_count + listed_count + statuses_count + favourites_count, data = sentiment_tt_3)
+summary(fit_group3_positive)
+```
