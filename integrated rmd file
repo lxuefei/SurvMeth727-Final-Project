@@ -32,6 +32,7 @@ library(stringr)
 library(DT)
 ```
 
+
 ```{r}
 # import data to excel format
 dp1_1 <- read.csv("dp1-1.csv")
@@ -58,12 +59,14 @@ dp3_9 <- read.csv("dp3-9.csv")
 dp3_10 <- read.csv("dp3-10.csv")
 ```
 
+
 ```{r}
 # Conbine data set
 dp1 <- rbind(dp1_1, dp1_2, dp1_3, dp1_4, dp1_5)
 dp2 <- rbind(dp2_1, dp2_2, dp2_3, dp2_4, dp2_5)
 dp3 <- rbind(dp3_1, dp3_2, dp3_3, dp3_4, dp3_5, dp3_6, dp3_7, dp3_8, dp3_9, dp3_10)
 ```
+
 
 ```{r}
 # Delete duplicate data
@@ -72,12 +75,15 @@ dp2 <- dp2[!duplicated(dp2),]
 dp3 <- dp3[!duplicated(dp3),] #删掉所有列上都重复的
 ```
 
+
 ```{r}
 # Random sample, 20000 for each group
 dp1 <- dp1[sample(nrow(dp1), 20000), ]
 dp2 <- dp2[sample(nrow(dp2), 20000), ]
 dp3 <- dp3[sample(nrow(dp3), 20000), ]
 ```
+
+
 ```{r}
 # Create wordclouds for each group
 # Group 1
@@ -123,3 +129,158 @@ seg_50
 barplot(seg_50)
 wordcloud2(seg,size = 2, minRotation = -pi/2, maxRotation = -pi/2) # Create wordcloud
 ```
+
+
+```{r}
+# merge different groups, add group as a variable
+group_1 <- rep(1, times = nrow(dp1))
+dp1$group <- group_1
+group_2 <- rep(2, times = nrow(dp2))
+dp2$group <- group_2
+group_3 <- rep(3, times = nrow(dp3))
+dp3$group <- group_3
+
+dp_all <- bind_rows(dp1,dp2,dp3)
+dp_all$group = factor (dp_all$group, levels = c(1,2,3), labels = c("depression group", "control group", "diagnosed group"))
+head(dp_all)
+```
+
+
+```{r}
+# check distributions of followers_count, friends_count, listed_count, statuses_count, favourites_count和sentiment_score
+
+# replace outliers with median (followers_count)
+dp_all %>%
+  ggplot(mapping = aes(x = '', y = followers_count)) + 
+  geom_boxplot(outlier.colour = 'red', outlier.shape = 15, width = 1.2)
+QL1 <- quantile(dp_all$followers_count, probs = 0.25) 
+QU1 <- quantile(dp_all$followers_count, probs = 0.75) 
+QU1_QL1 <- QU1 - QL1
+QL1;QU1_QL1;QU1
+which(dp_all$followers_count > QU1 + 1.5*QU1_QL1)
+dp_all$followers_count[which(dp_all$followers_count > QU1 + 1.5*QU1_QL1)]
+
+out_imp01 <- median(dp_all$followers_count)
+dp_all$followers_count[which(dp_all$followers_count > QU1 + 1.5*QU1_QL1)] <- out_imp01
+qqnorm(dp_all$followers_count, ylab = "Number of followers") 
+qqline(dp_all$followers_count)
+# hist distribution
+hist(dp_all$followers_count)
+
+# replace outliers with median (friends_count)
+dp_all %>%
+  ggplot(mapping = aes(x = '', y = friends_count)) + 
+  geom_boxplot(outlier.colour = 'red', outlier.shape = 15, width = 1.2)
+QL2 <- quantile(dp_all$friends_count, probs = 0.25) 
+QU2 <- quantile(dp_all$friends_count, probs = 0.75) 
+QU2_QL2 <- QU2 - QL2
+QL2;QU2_QL2;QU2
+which(dp_all$friends_count > QU2 + 1.5*QU2_QL2)
+dp_all$friends_count[which(dp_all$friends_count > QU2 + 1.5*QU2_QL2)]
+
+out_imp02 <- median(dp_all$friends_count)
+dp_all$friends_count[which(dp_all$friends_count > QU2 + 1.5*QU2_QL2)] <- out_imp02
+qqnorm(dp_all$friends_count, ylab = "Number of friends") 
+qqline(dp_all$friends_count)
+# hist distribution
+hist(dp_all$friends_count)
+
+# replace outliers with median (statuses_count)
+dp_all %>%
+  ggplot(mapping = aes(x = '', y = statuses_count)) + 
+  geom_boxplot(outlier.colour = 'red', outlier.shape = 15, width = 1.2)
+QL3 <- quantile(dp_all$statuses_count, probs = 0.25) 
+QU3 <- quantile(dp_all$statuses_count, probs = 0.75) 
+QU3_QL3 <- QU3 - QL3
+QL3;QU3_QL3;QU3
+which(dp_all$statuses_count > QU3 + 1.5*QU3_QL3)
+dp_all$statuses_count[which(dp_all$statuses_count > QU3 + 1.5*QU3_QL3)]
+
+out_imp03 <- median(dp_all$statuses_count)
+dp_all$statuses_count[which(dp_all$statuses_count > QU3 + 1.5*QU3_QL3)] <- out_imp03
+qqnorm(dp_all$statuses_count, ylab = "Number of statuses") 
+qqline(dp_all$statuses_count)
+# hist distribution
+hist(dp_all$statuses_count)
+
+# replace outliers with median (以favourites_count为例)
+dp_all %>%
+  ggplot(mapping = aes(x = '', y = favourites_count)) + 
+  geom_boxplot(outlier.colour = 'red', outlier.shape = 15, width = 1.2)
+QL4 <- quantile(dp_all$favourites_count, probs = 0.25) 
+QU4 <- quantile(dp_all$favourites_count, probs = 0.75) 
+QU4_QL4 <- QU4 - QL4
+QL4;QU4_QL4;QU4
+which(dp_all$favourites_count > QU4 + 1.5*QU4_QL4)
+dp_all$favourites_count[which(dp_all$favourites_count > QU4 + 1.5*QU4_QL4)]
+
+out_imp04 <- median(dp_all$favourites_count)
+dp_all$favourites_count[which(dp_all$favourites_count > QU4 + 1.5*QU4_QL4)] <- out_imp04
+qqnorm(dp_all$favourites_count, ylab = "Number of favourites") 
+qqline(dp_all$favourites_count)
+# hist distribution
+hist(dp_all$favourites_count)
+```
+
+
+```{r}
+# Descriptive statistics 
+summary(dp_all)
+dp_agg <- dp_all %>%
+  select(followers_count, friends_count, statuses_count, favourites_count, group) 
+dp_stats <- aggregate(dp_agg[,(1:4)], by = list(dp_agg$group), FUN = mean)
+colnames(dp_stats)[1] <- "group"
+dp_stats
+
+dp_all %>% # followers_count
+  group_by(group) %>%
+  summarise(min = min(followers_count), max = max(followers_count), median = median(followers_count), mean = mean(followers_count), sd = sd(followers_count))
+
+dp_all %>% # friends_count
+  group_by(group) %>%
+  summarise(min = min(friends_count), max = max(friends_count), median = median(friends_count), mean = mean(friends_count), sd = sd(friends_count))
+ 
+dp_all %>% # statuses_count
+  group_by(group) %>%
+  summarise(min = min(statuses_count), max = max(statuses_count), median = median(statuses_count), mean = mean(statuses_count), sd = sd(statuses_count))
+
+dp_all %>% # favourites_count
+  group_by(group) %>%
+  summarise(min = min(favourites_count), max = max(favourites_count), median = median(favourites_count), mean = mean(favourites_count), sd = sd(favourites_count))
+
+# plot user features distribution  
+ggplot(mapping = aes(dp_all$followers_count)) + geom_histogram(bins = 100)
+ggplot(mapping = aes(dp_all$friends_count)) + geom_histogram(bins = 100)
+ggplot(mapping = aes(dp_all$statuses_count)) + geom_histogram(bins = 100)
+ggplot(mapping = aes(dp_all$favourites_count)) + geom_histogram(bins = 100)
+
+# plot means of user features among 3 groups
+p1 <- ggplot(data = dp_stats, aes(y = followers_count, x = group, fill = group, xlab = "")) +
+  geom_bar(stat="identity") +
+  theme_classic() +
+  scale_x_discrete(labels = abbreviate)
+p2 <- ggplot(data = dp_stats, aes(y = friends_count, x = group, fill = group, xlab = "")) +
+  geom_bar(stat="identity") +
+  theme_classic() +
+  scale_x_discrete(labels = abbreviate)
+p3 <- ggplot(data = dp_stats, aes(y = statuses_count, x = group, fill = group, xlab = "")) +
+  geom_bar(stat="identity") +
+  theme_classic() +
+  scale_x_discrete(labels = abbreviate)
+p4 <- ggplot(data = dp_stats, aes(y = favourites_count, x = group, fill = group, xlab = "")) +
+  geom_bar(stat="identity") +
+  theme_classic() +
+  scale_x_discrete(labels = abbreviate)
+ggarrange(p1,p2,p3,p4, ncol=2,nrow=2,labels=c("A","B","C","D"))
+  
+# Descriptive statistics (categorical source)
+dp_all %>%
+  group_by(source) %>%
+  summarise(total = n()) %>%
+  filter(source == "Facebook"|source == "Instagram"|source == "Tweetbot for iOS"|source == "TweetDeck"|source == "twittbot.net"|source == "Twitter for Android"|source == "Twitter for iPad"|source == "Twitter for iPhone"|source == "Twitter Web App"|source == "Twitter Web Client") %>%
+  ggplot() +
+  geom_bar(mapping = aes(x = reorder(source, total), y = total), stat = 'identity', fill = 'skyblue2') +
+  coord_flip()
+```
+
+
